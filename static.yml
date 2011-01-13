@@ -1,0 +1,4 @@
+author: "Markus Staab"
+supportpage: "forum.redaxo.de"
+extperm: ['be_search[mediapool]','be_search[structure]']
+sally: ["0.3", "0.4"]
