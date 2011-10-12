@@ -122,13 +122,10 @@ abstract class besearch_Util {
 		}
 
 		$select_name = 'category_id';
-		$addHomepage = true;
-
 		$page = sly_Controller_Base::getPage();
 
 		if ($page != 'structure') {
 			$select_name = 'article_id';
-			$addHomepage = false;
 		}
 
 		$user = sly_Util_User::getCurrentUser();
