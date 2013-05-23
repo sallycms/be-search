@@ -25,7 +25,7 @@
             "imex-ignore": true
         },
         "branch-alias": {
-            "dev-default": "1.x-dev"
+            "dev-default": "2.x-dev"
         }
     }
 }
