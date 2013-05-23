@@ -8,8 +8,18 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-if (!sly_Core::isBackend()) return;
-define('BESEARCH_PATH', rtrim(dirname(__FILE__), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR);
+if ($container['sly-app']->isBackend()) {
+	define('SLY_BESEARCH_PATH', __DIR__);
 
-sly_Loader::addLoadPath(BESEARCH_PATH.'lib');
-sly_Core::dispatcher()->register('SLY_CONTROLLER_FOUND', array('besearch_Util', 'controllerFound'));
+	// make sure the addOn loads fine when not installed via Composer (i.e. when developing)
+	$container['sly-classloader']->add('sly\besearch\\', SLY_BESEARCH_PATH.'/lib');
+	$container['sly-classloader']->add('sly_Controller_', SLY_BESEARCH_PATH.'/lib');
+
+	// register our helper service
+	$container['sly-besearch-util'] = $container->share(function($container) {
+		return new sly\besearch\Util($container);
+	});
+
+	// integrate with the backend
+	$container['sly-dispatcher']->addListener('SLY_CONTROLLER_FOUND', array('%sly-besearch-util%', 'controllerFound'));
+}

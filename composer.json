@@ -10,22 +10,23 @@
     "license": "MIT",
     "type": "sallycms-addon",
     "require": {
+        "php": ">=5.3.3",
         "sallycms/composer-installer": "~1.1",
-        "sallycms/sallycms": ">=0.7,<0.9"
+        "sallycms/sallycms": ">=0.9,<0.10"
     },
     "autoload": {
         "psr-0": {
-            "besearch_": "lib/",
+            "sly\\besearch\\": "lib/",
             "sly_Controller_": "lib/"
         }
     },
     "extra": {
         "sallycms": {
-            "version": "1.x-dev",
+            "version": "2.x-dev",
             "imex-ignore": true
         },
         "branch-alias": {
-            "dev-default": "1.x-dev"
+            "dev-default": "2.x-dev"
         }
     }
 }
