@@ -13,34 +13,9 @@
  * @author zozi@webvariants.de
  */
 abstract class besearch_Util {
-	/**
-	 * Eventhandler for PAGE_CHECKED Event
-	 *
-	 * @param array $params
-	 */
-	public static function controllerFound(array $params) {
-		$dispatcher = sly_Core::dispatcher();
-		$page       = $params['name'];
-		$assets     = null;
-
-		if ($page === 'structure') {
-			$assets = true;
-			$dispatcher->register('PAGE_STRUCTURE_HEADER', array(__CLASS__, 'articleSearch'));
-		}
-		elseif ($page === 'content' || $page === 'contentmeta') {
-			$assets = true;
-			$dispatcher->register('PAGE_CONTENT_HEADER', array(__CLASS__, 'articleSearch'));
-		}
-		elseif ($page === 'mediapool') {
-			$assets = false;
-			$dispatcher->register('SLY_MEDIA_LIST_TOOLBAR', array(__CLASS__, 'mediaToolbar'));
-			$dispatcher->register('SLY_MEDIA_LIST_QUERY', array(__CLASS__, 'mediaQuery'));
-		}
-
-		if ($assets !== null) {
-			self::addAssets($assets);
-			sly_Core::getI18N()->appendFile(BESEARCH_PATH.'lang/');
-		}
+	private static function initWidget($articleSearch) {
+		self::addAssets($assets);
+		sly_Core::getI18N()->appendFile(BESEARCH_PATH.'lang/');
 	}
 
 	/**
@@ -63,6 +38,8 @@ abstract class besearch_Util {
 	}
 
 	public static function mediaToolbar(array $params) {
+		self::initWidget(false);
+
 		$mediumName = sly_request('be_search_medium_name', 'string'); // POST in <=0.7, GET in >=0.8
 		$form       = $params['subject'];
 		$input      = new sly_Form_Input_Text('be_search_medium_name', '', $mediumName);
@@ -89,6 +66,8 @@ abstract class besearch_Util {
 	}
 
 	public static function articleSearch(array $params) {
+		self::initWidget(true);
+
 		$editUrl    = sly_Util_HTTP::getBaseUrl(true).'/backend/index.php?page=content&article_id=%d&clang=%d';
 		$categoryID = sly_request('category_id', 'int', 0);
 		$articleID  = sly_Core::getCurrentArticleId();
