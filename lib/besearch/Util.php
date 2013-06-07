@@ -13,17 +13,20 @@
  * @author zozi@webvariants.de
  */
 abstract class besearch_Util {
-	private static function initWidget($articleSearch) {
-		self::addAssets($assets);
+	/**
+	 * @param boolean $addJs  add js to page
+	 */
+	private static function initWidget($addJs) {
+		self::addAssets($addJs);
 		sly_Core::getI18N()->appendFile(BESEARCH_PATH.'lang/');
 	}
 
 	/**
 	 * adds some needed assets to page
 	 *
-	 * @param boolean $articleSearch  add js for article search
+	 * @param boolean $addJs  add js to page
 	 */
-	private static function addAssets($articleSearch) {
+	private static function addAssets($addJs) {
 		$layout = sly_Core::getLayout();
 		$is06   = sly_Core::getVersion('X.Y') === '0.6';
 		$base   = $is06 ? '../data/dyn/public/be_search/' : sly_Util_AddOn::assetBaseUri('sallycms/be-search');
@@ -31,7 +34,7 @@ abstract class besearch_Util {
 
 		$layout->addCSSFile($base.'css/be_search.'.$ext);
 
-		if ($articleSearch) {
+		if ($addJs) {
 			$layout->addJavaScriptFile($is06 ? 'assets/js/jquery.autocomplete.min.js' : $base.'js/jquery.autocomplete.min.js');
 			$layout->addJavaScriptFile($base.'js/be_search.js');
 		}
