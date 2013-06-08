@@ -14,7 +14,7 @@
  */
 abstract class besearch_Util {
 	/**
-	 * @param boolean $articleSearch  add js for articleSearch
+	 * @param boolean $articleSearch  add js for article search
 	 */
 	private static function initWidget($articleSearch) {
 		self::addAssets($articleSearch);
@@ -24,7 +24,7 @@ abstract class besearch_Util {
 	/**
 	 * adds some needed assets to page
 	 *
-	 * @param boolean $articleSearch  add js for articleSearch
+	 * @param boolean $articleSearch  add js for article search
 	 */
 	private static function addAssets($articleSearch) {
 		$layout = sly_Core::getLayout();
