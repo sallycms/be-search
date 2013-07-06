@@ -12,4 +12,9 @@ if (!sly_Core::isBackend()) return;
 define('BESEARCH_PATH', rtrim(dirname(__FILE__), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR);
 
 sly_Loader::addLoadPath(BESEARCH_PATH.'lib');
-sly_Core::dispatcher()->register('SLY_CONTROLLER_FOUND', array('besearch_Util', 'controllerFound'));
+
+$dispatcher = sly_Core::dispatcher();
+$dispatcher->register('PAGE_STRUCTURE_HEADER', array('besearch_Util', 'articleSearch'));
+$dispatcher->register('PAGE_CONTENT_HEADER', array('besearch_Util', 'articleSearch'));
+$dispatcher->register('SLY_MEDIA_LIST_TOOLBAR', array('besearch_Util', 'mediaToolbar'));
+$dispatcher->register('SLY_MEDIA_LIST_QUERY', array('besearch_Util', 'mediaQuery'));
