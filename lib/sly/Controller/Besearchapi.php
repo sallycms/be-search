@@ -8,28 +8,26 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-class sly_Controller_Besearchapi extends sly_Controller_Ajax implements sly_Controller_Interface {
-	public function indexAction() {
-		return new sly_Response('Welcome to the API controller.', 404);
-	}
-
+class sly_Controller_Besearchapi extends sly_Controller_Base implements sly_Controller_Interface {
 	public function articlesearchAction() {
-		$query    = sly_get('q', 'string');
-		$sql      = sly_DB_Persistence::getInstance();
-		$user     = sly_Util_User::getCurrentUser();
-		$prefix   = sly_Core::getTablePrefix();
-		$clang    = sly_Core::getCurrentClang();
-		$response = sly_Core::getResponse();
-		$home     = '('.t('home').')';
-		$lines    = array();
+		$container  = $this->getContainer();
+		$request    = $this->getRequest();
+		$query      = $request->get('q', 'string');
+		$sql        = $container['sly-persistence'];
+		$artService = $container['sly-service-article'];
+		$clang      = $container['sly-current-lang-id'];
+		$user       = $container['sly-service-user']->getCurrentUser();
+		$prefix     = $sql->getPrefix();
+		$home       = '('.t('home').')';
+		$lines      = array();
 
-		$sql->query('SELECT id FROM '.$prefix.'article WHERE name LIKE ? GROUP BY id', array("%$query%"));
+		$sql->query('SELECT DISTINCT id FROM '.$prefix.'article WHERE clang = ? AND name LIKE ? GROUP BY id', array($clang, "%$query%"));
 
-		foreach ($sql as $row) {
+		foreach ($sql->all() as $row) {
 			$id      = $row['id'];
-			$article = sly_Util_Article::findById($id, $clang);
+			$article = $artService->findByPK($id, $clang);
 
-			if ($article && sly_Util_Article::canReadArticle($user, $id)) {
+			if ($article && sly_Backend_Authorisation_Util::canReadArticle($user, $id)) {
 				$name = str_replace('|', '/', sly_html($article->getName()));
 				$path = $article->getParentTree();
 
@@ -47,13 +45,17 @@ class sly_Controller_Besearchapi extends sly_Controller_Ajax implements sly_Cont
 			}
 		}
 
-		$response->setContentType('text/plain');
-		$response->setContent(implode("\n", $lines));
+		$response = new sly_Response(implode("\n", $lines));
+		$response->setContentType('text/plain', 'UTF-8');
 
 		return $response;
 	}
 
 	public function checkPermission($action) {
-		return sly_Util_User::getCurrentUser() !== null;
+		return $this->getContainer()->get('sly-service-user')->getCurrentUser() !== null;
+	}
+
+	protected function getViewFolder() {
+		throw new LogicException('This controller has no views.');
 	}
 }

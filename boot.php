@@ -8,13 +8,22 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-if (!sly_Core::isBackend()) return;
-define('BESEARCH_PATH', rtrim(dirname(__FILE__), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR);
+if ($container['sly-app']->isBackend()) {
+	define('SLY_BESEARCH_PATH', __DIR__);
 
-sly_Loader::addLoadPath(BESEARCH_PATH.'lib');
+	// make sure the addOn loads fine when not installed via Composer (i.e. when developing)
+	$container['sly-classloader']->add('sly\besearch\\', SLY_BESEARCH_PATH.'/lib');
+	$container['sly-classloader']->add('sly_Controller_', SLY_BESEARCH_PATH.'/lib');
 
-$dispatcher = sly_Core::dispatcher();
-$dispatcher->register('PAGE_STRUCTURE_HEADER', array('besearch_Util', 'articleSearch'));
-$dispatcher->register('PAGE_CONTENT_HEADER', array('besearch_Util', 'articleSearch'));
-$dispatcher->register('SLY_MEDIA_LIST_TOOLBAR', array('besearch_Util', 'mediaToolbar'));
-$dispatcher->register('SLY_MEDIA_LIST_QUERY', array('besearch_Util', 'mediaQuery'));
+	// register our helper service
+	$container['sly-besearch-util'] = $container->share(function($container) {
+		return new sly\besearch\Util($container);
+	});
+
+	// integrate with the backend
+	$dispatcher = $container['sly-dispatcher'];
+	$dispatcher->addListener('PAGE_STRUCTURE_HEADER',  array('%sly-besearch-util%', 'articleSearch'));
+	$dispatcher->addListener('PAGE_CONTENT_HEADER',    array('%sly-besearch-util%', 'articleSearch'));
+	$dispatcher->addListener('SLY_MEDIA_LIST_TOOLBAR', array('%sly-besearch-util%', 'mediaToolbar'));
+	$dispatcher->addListener('SLY_MEDIA_LIST_QUERY',   array('%sly-besearch-util%', 'mediaQuery'));
+}

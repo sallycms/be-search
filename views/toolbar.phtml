@@ -12,28 +12,28 @@
 	<div class="sly-toolbar-content">
 		<div class="sly-form">
 			<div class="fleft">
-				<label for="besearch-article-name"><?php echo t('article_name') ?>:</label>
+				<label for="besearch-article-name"><?php print t('article_name') ?>:</label>
 				<input autocomplete="off" id="besearch-article-name" type="text" name="besearch-article-name" value="" class="sly-form-text" />
 			</div>
 			<fieldset>
-				<form action="index.php?page=<?php echo $page ?>" method="post">
-					<input type="hidden" name="category_id" value="<?php echo $categoryID ?>" />
-					<input type="hidden" name="article_id" value="<?php echo $articleID ?>" />
-					<input type="hidden" name="clang" value="<?php echo $clang ?>" />
-					<?php print $hasCsrf ? sly_Util_Csrf::renderInputTag() : '' ?>
+				<form action="index.php?page=<?php print $page ?>" method="post">
+					<input type="hidden" name="category_id" value="<?php print $categoryID ?>" />
+					<input type="hidden" name="article_id" value="<?php print $articleID ?>" />
+					<input type="hidden" name="clang" value="<?php print $clang ?>" />
+					<?php print sly_Util_Csrf::renderInputTag() ?>
 
 					<div class="fleft">
-						<label for="besearch-article-id"><?php echo t('id') ?>:</label>
+						<label for="besearch-article-id"><?php print t('id') ?>:</label>
 						<input type="text" name="besearch-article-id" id="besearch-article-id" class="sly-form-text" />
-						<input class="sly-form-submit" type="submit" id="besearch-start-search" value="<?php echo t('search') ?>" />
+						<input class="sly-form-submit" type="submit" id="besearch-start-search" value="<?php print t('search') ?>" />
 					</div>
 				</form>
 				<form action="index.php" method="get">
 					<input type="hidden" name="page" value="structure" />
-					<input type="hidden" name="clang" value="<?php echo $clang ?>" />
+					<input type="hidden" name="clang" value="<?php print $clang ?>" />
 					<div class="fright">
-						<label for="besearch-category-id"><?php echo t('be_search_quick_navi') ?></label>
-						<?php echo $quickNavi->render() ?>
+						<label for="besearch-category-id"><?php print t('be_search_quick_navi') ?></label>
+						<?php print $quickNavi->render() ?>
 					</div>
 				</form>
 			</fieldset>
