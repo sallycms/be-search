@@ -11,10 +11,6 @@
 if ($container['sly-app']->isBackend()) {
 	define('SLY_BESEARCH_PATH', __DIR__);
 
-	// make sure the addOn loads fine when not installed via Composer (i.e. when developing)
-	$container['sly-classloader']->add('sly\besearch\\', SLY_BESEARCH_PATH.'/lib');
-	$container['sly-classloader']->add('sly_Controller_', SLY_BESEARCH_PATH.'/lib');
-
 	// register our helper service
 	$container['sly-besearch-util'] = $container->share(function($container) {
 		return new sly\besearch\Util($container);
