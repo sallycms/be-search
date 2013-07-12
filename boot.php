@@ -20,10 +20,27 @@ if ($container['sly-app']->isBackend()) {
 		return new sly\besearch\Util($container);
 	});
 
-	// integrate with the backend
 	$dispatcher = $container['sly-dispatcher'];
-	$dispatcher->addListener('PAGE_STRUCTURE_HEADER',  array('%sly-besearch-util%', 'articleSearch'));
-	$dispatcher->addListener('PAGE_CONTENT_HEADER',    array('%sly-besearch-util%', 'articleSearch'));
-	$dispatcher->addListener('SLY_MEDIA_LIST_TOOLBAR', array('%sly-besearch-util%', 'mediaToolbar'));
-	$dispatcher->addListener('SLY_MEDIA_LIST_QUERY',   array('%sly-besearch-util%', 'mediaQuery'));
+	$util       = '%sly-besearch-util%';
+
+	// integrate with the backend
+	$dispatcher->addListener('PAGE_STRUCTURE_HEADER',  array($util, 'articleSearch'));
+	$dispatcher->addListener('PAGE_CONTENT_HEADER',    array($util, 'articleSearch'));
+	$dispatcher->addListener('SLY_MEDIA_LIST_TOOLBAR', array($util, 'mediaToolbar'));
+	$dispatcher->addListener('SLY_MEDIA_LIST_QUERY',   array($util, 'mediaQuery'));
+
+	// clear our simple cache whenever something changed
+	$dispatcher->addListener('SLY_CAT_ADDED',        array($util, 'clearCache'));
+	$dispatcher->addListener('SLY_CAT_DELETED',      array($util, 'clearCache'));
+	$dispatcher->addListener('SLY_CAT_MOVED',        array($util, 'clearCache'));
+	$dispatcher->addListener('SLY_ART_TO_STARTPAGE', array($util, 'clearCache'));
+	$dispatcher->addListener('SLY_CLANG_ADDED',      array($util, 'clearCache'));
+	$dispatcher->addListener('SLY_CLANG_DELETED',    array($util, 'clearCache'));
+	$dispatcher->addListener('SLY_CACHE_CLEARED',    array($util, 'clearCache'));
+	$dispatcher->addListener('SLY_CAT_UPDATED',      array($util, 'clearPerLanguageCache'));
+	$dispatcher->addListener('SLY_ART_ONLINE',       array($util, 'clearPerLanguageCache'));
+	$dispatcher->addListener('SLY_ART_OFFLINE',      array($util, 'clearPerLanguageCache'));
+	$dispatcher->addListener('SLY_ART_TOUCHED',      array($util, 'clearPerLanguageCache'));
+	$dispatcher->addListener('SLY_USER_UPDATED',     array($util, 'clearPerUserCache'));
+	$dispatcher->addListener('SLY_USER_DELETED',     array($util, 'clearPerUserCache'));
 }

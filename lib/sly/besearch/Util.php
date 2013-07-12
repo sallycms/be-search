@@ -97,7 +97,16 @@ class Util implements \sly_ContainerAwareInterface {
 
 		$page      = $this->container['sly-app']->getCurrentControllerName();
 		$user      = $this->container['sly-service-user']->getCurrentUser();
-		$quickNavi = \sly_Backend_Form_Helper::getCategorySelect('category_id', false, null, null, $user, 'besearch-category-id', true);
+		$cache     = $this->container['sly-cache'];
+		$namespace = 'sly.besearch.clang'.$clang;
+		$cacheKey  = 'user'.$user->getId();
+		$quickNavi = $cache->get($namespace, $cacheKey);
+
+		if (!$quickNavi) {
+			$quickNavi = \sly_Backend_Form_Helper::getCategorySelect('category_id', false, null, null, $user, 'besearch-category-id', true);
+
+			$cache->set($namespace, $cacheKey, $quickNavi);
+		}
 
 		// find current category
 
@@ -116,6 +125,28 @@ class Util implements \sly_ContainerAwareInterface {
 		$bar = ob_get_clean();
 
 		return $bar.$header;
+	}
+
+	public function clearCache($subject = null) {
+		$this->container['sly-cache']->clear('sly.besearch', true);
+		return $subject;
+	}
+
+	public function clearPerLanguageCache(\sly_Model_Base_Article $baseArticle) {
+		$this->container['sly-cache']->clear('sly.besearch.clang'.$baseArticle->getClang());
+		return $baseArticle;
+	}
+
+	public function clearPerUserCache(\sly_Model_User $user) {
+		$languages = $this->container['sly-service-language']->findAll(true);
+		$cache     = $this->container['sly-cache'];
+		$cacheKey  = 'user'.$user->getId();
+
+		foreach ($languages as $language) {
+			$cache->delete('sly.besearch.clang'.$language, $cacheKey);
+		}
+
+		return $user;
 	}
 
 	/**
