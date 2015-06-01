@@ -19,11 +19,14 @@
 	}
 
 	.sly-toolbar-content {
-		padding: 7px 10px !important;
+		padding: 7px 0;
 	}
 
 	.fleft  { float: left;  }
-	.fright { float: right; }
+	.fright { 
+		float: right; 
+		width: calc(~'100% - 210px');
+	}
 
 	.chzn-container {
 		top: 2px;
@@ -31,23 +34,25 @@
 }
 
 #besearch-article-name {
-	width: 150px;
+	width: 350px;
 	margin-right: 5px;
 }
 
 #besearch-category-id {
-	width: auto;
-	min-width: 150px;
-	max-width: 260px;
+/*	width: auto;
+	min-width: 150px;*/
+/*	max-width: 260px;*/
 }
 
 #besearch-article-id {
-	width: 30px;
+	width: 100px;
 	margin-right: 5px;
+	display: inline-block;
 }
 
 #besearch-start-search {
 	margin-left: 0px;
+	margin-right: 5px;
 }
 
 .sly-filter-results {
@@ -72,4 +77,8 @@
 			}
 		}
 	}
+}
+
+#s2id_besearch-category-id {
+	margin: 0;
 }

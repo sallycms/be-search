@@ -24,14 +24,16 @@
 
 					<div class="fleft">
 						<label for="besearch-article-id"><?php print t('id') ?>:</label>
-						<input type="text" name="besearch-article-id" id="besearch-article-id" class="sly-form-text" />
-						<input class="sly-form-submit" type="submit" id="besearch-start-search" value="<?php print t('search') ?>" />
+						<div>
+							<input type="text" name="besearch-article-id" id="besearch-article-id" class="sly-form-text" />
+							<input class="sly-form-submit" type="submit" id="besearch-start-search" value="<?php print t('search') ?>" />
+						</div>
 					</div>
 				</form>
 				<form action="index.php" method="get">
 					<input type="hidden" name="page" value="structure" />
 					<input type="hidden" name="clang" value="<?php print $clang ?>" />
-					<div class="fright">
+					<div class="fright" id="besearch_quicknavi">
 						<label for="besearch-category-id"><?php print t('be_search_quick_navi') ?></label>
 						<?php print $quickNavi->render() ?>
 					</div>
